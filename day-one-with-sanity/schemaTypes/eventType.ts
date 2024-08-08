@@ -31,24 +31,33 @@ export const eventType = defineType({
       hidden: ({document}) => !document?.name,
       group: 'details',
     }),
+    
     defineField({
       name: 'eventType',
       type: 'string',
-      options: {
-        list: ['in-person','virtual'],
-        layout: 'radio'
+      title: 'Event type',
+      deprecated: {
+        reason: 'Use the "Event format" field instead.',
       },
-      group: 'details',
-      
-    }),    
-    defineField({
-      name: 'startDate',
-      type: 'datetime',
-      group: 'details',
-      fieldset: 'dates'
+      readOnly: true,
+      hidden: true, // hide from content creators, but keep it in code
+      options: {
+        list: ['in-person', 'virtual'],
+        layout: 'radio',
+      },
     }),
     defineField({
-      name: 'endDate',
+      name: 'format',
+      type: 'string',
+      title: 'Event format',
+      options: {
+        list: ['in-person', 'virtual'],
+        layout: 'radio',
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'date',
       type: 'datetime',
       group: 'details',
       fieldset: 'dates'
@@ -128,7 +137,7 @@ preview: {
       name: 'name',
       venue: 'venue.name',
       artist: 'headline.name',
-      date: 'startDate',
+      date: 'date',
       image: 'image',
     },
     prepare({name, venue, artist,date, image}) {

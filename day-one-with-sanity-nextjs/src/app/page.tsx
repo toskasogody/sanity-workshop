@@ -6,7 +6,7 @@ import { sanityFetch } from "@/sanity/client";
 const EVENTS_QUERY = `*[
   _type == "event"
   && defined(slug.current)
-]{_id, name, slug, startDate}|order(startDate desc)`;
+]{_id, name, slug, date}|order(date desc)`;
 
 export default async function IndexPage() {
   const events = await sanityFetch<SanityDocument[]>({query: EVENTS_QUERY});
@@ -28,7 +28,7 @@ export default async function IndexPage() {
             >
               <h2 className="text-xl font-semibold">{event?.name}</h2>
               <p className="text-gray-500">
-                {new Date(event?.startDate).toLocaleDateString()}
+                {new Date(event?.date).toLocaleDateString()}
               </p>
             </Link>
           </li>

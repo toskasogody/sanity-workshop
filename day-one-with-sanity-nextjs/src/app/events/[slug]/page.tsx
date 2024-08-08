@@ -6,13 +6,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 const EVENT_QUERY = `*[
-    _type == "event" &&
-    slug.current == $slug
-  ][0]{
-  ...,
-  headline->,
-  venue->,
+  _type == "event" &&
+  slug.current == $slug
+][0]{
+	...,
+	headline->,
+	venue->
 }`;
+
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
   projectId && dataset
@@ -32,12 +33,11 @@ export default async function EventPage({
 
   const {
     name,
-    startDate,
-    endDate,
+    date,
     headline,
     image,
     details,
-    eventType,
+    format,
     doorsOpen,
     venue,
     tickets,
@@ -46,11 +46,10 @@ export default async function EventPage({
   const eventImageUrl = image
     ? urlFor(image)?.width(550).height(310).url()
     : null;
-  const eventDate = new Date(startDate).toDateString();
-  const eventEndDate = new Date(endDate).toDateString();
-  const eventTime = new Date(startDate).toLocaleTimeString();
+  const eventDate = new Date(date).toDateString();
+  const eventTime = new Date(date).toLocaleTimeString();
   const doorsOpenTime = new Date(
-    new Date(startDate).getTime() + doorsOpen * 60000
+    new Date(date).getTime() + doorsOpen * 60000
   ).toLocaleTimeString();
 
   return (
@@ -68,9 +67,9 @@ export default async function EventPage({
         />
         <div className="flex flex-col justify-center space-y-4">
           <div className="space-y-4">
-            {eventType ? (
+            {format ? (
               <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800 capitalize">
-                {eventType.replace("-", " ")}
+                {format.replace("-", " ")}
               </div>
             ) : null}
             {name ? (
@@ -85,16 +84,10 @@ export default async function EventPage({
               </dl>
             ) : null}
             <dl className="grid grid-cols-2 gap-1 text-sm font-medium sm:gap-2 lg:text-base">
-              <dd className="font-semibold">Start Date</dd>
+              <dd className="font-semibold">Date</dd>
               <div>
                 {eventDate && <dt>{eventDate}</dt>}
                 {eventTime && <dt>{eventTime}</dt>}
-              </div>
-            </dl>
-            <dl className="grid grid-cols-2 gap-1 text-sm font-medium sm:gap-2 lg:text-base">
-              <dd className="font-semibold">End Date</dd>
-              <div>
-                {eventEndDate && <dt>{eventEndDate}</dt>}
               </div>
             </dl>
             {doorsOpenTime ? (

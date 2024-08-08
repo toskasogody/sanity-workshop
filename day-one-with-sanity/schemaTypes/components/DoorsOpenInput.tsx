@@ -6,7 +6,7 @@ function substractMinutesFromDate(date: string, minutes: number){
 }
 
 export function DoorsOpenInput(props: NumberInputProps) {
-  const date = useFormValue(['startDate']) as string | undefined
+  const date = useFormValue(['date']) as string | undefined
 
 
   return (
